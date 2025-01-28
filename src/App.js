@@ -5,6 +5,7 @@ function App() {
   const [tasks, setTasks] = useState([{ id: 1, title: 'Залупа', date: new Date().toLocaleString() , isediting: false}]);
   const [newTaskTitle, setNewTaskTitle] = useState('');
   
+  const Ohuet = "Ну нихуя ж себе! Илюша засылай некст таску";
   const addTask = () => {  
     const newTask = {
       id: Date.now(),
