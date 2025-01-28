@@ -1,23 +1,42 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import TaskItem from './components/TaskItem';
 
 function App() {
+  const [tasks, setTasks] = useState([{ id: 1, title: 'Залупа', date: new Date().toLocaleString() , isediting: false}]);
+  const [newTaskTitle, setNewTaskTitle] = useState('');
+  
+  const addTask = () => {  
+    const newTask = {
+      id: Date.now(),
+      title: newTaskTitle,
+      date: new Date().toLocaleString()
+    };
+    setTasks(prev => [...prev, newTask]);
+    setNewTaskTitle(''); //Чистка инпута
+  };
+  const deleteTask = (id) => {
+    setTasks(tasks.filter(task => task.id !== id)); //Удаляет задачу по id
+  };
+  const editTask = (id) => {
+    setTasks(tasks.map(task => 
+      task.id === id ? { ...task, isediting: !task.isediting, date: new Date().toLocaleString()} : task));
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <input 
+        placeholder='Новая задача'
+        value={newTaskTitle}
+        onChange={(e) => setNewTaskTitle(e.target.value)}
+      />
+      <button onClick={addTask}>Создать</button>
+      {tasks.map(task => (
+        <TaskItem 
+          task={task}
+          onDelete={id => deleteTask(id)} // Передаю функцию удаления
+          onEdit={id => editTask(id)} // Передаю фунцию редактирования
+        />
+      ))}
     </div>
   );
 }
